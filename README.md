@@ -15,9 +15,10 @@ const createParser = require('js-native-template');
 
 const parse = createParser();
 
-const result = parse('Sum: 1 + 1 = ${1+1}');
-
-// result === 'Sum: 1 + 1 = 2'
+(async () => {
+  const result = await parse('Sum: 1 + 1 = ${1+1}');
+  // result === 'Sum: 1 + 1 = 2'
+})();
 ```
 
 ### With custom methods
@@ -32,7 +33,8 @@ const methods = {
 
 const parse = createParser(methods);
 
-const result = parse('Echoes: ${echo("foo").toUpperCase()} ${asyncEcho("bar")}');
-
-// result === 'Echoes: FOO bar'
+(async () => {
+  const result = await parse('Echoes: ${echo("foo").toUpperCase()} ${asyncEcho("bar")}');
+  // result === 'Echoes: FOO bar'
+)();
 ```
