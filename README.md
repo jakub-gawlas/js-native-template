@@ -6,7 +6,7 @@
 yarn add js-native-template
 ```
 
-## Using
+## Examples
 
 ### Basic
 
@@ -37,4 +37,20 @@ const parse = createParser(methods);
   const result = await parse('Echoes: ${echo("foo").toUpperCase()} ${asyncEcho("bar")}');
   // result === 'Echoes: FOO bar'
 )();
+```
+
+### Catch errors
+
+```js
+const createParser = require('js-native-template');
+
+const parse = createParser();
+
+(async () => {
+  try {
+  const result = await parse('Throw error: ${nonExisting}');
+  } catch(err){
+    // err.message === 'nonExisting is not defined at 1:16' - position of occured error is relative in parsed string
+  }
+})();
 ```
