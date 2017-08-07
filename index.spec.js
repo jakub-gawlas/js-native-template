@@ -1,4 +1,4 @@
-const createParser = require('./parser');
+const createParser = require('./index');
 
 describe('parser', () => {
   describe('basic', () => {
@@ -112,6 +112,30 @@ describe('parser', () => {
       it(desc, async () => {
         const parse = createParser(methods);
         expect(await parse(src, args)).toEqual(out);
+      });
+    });
+  });
+  describe('errors', () => {
+    [
+      {
+        desc: 'single line',
+        src: 'foo${bar}',
+        error: 'bar is not defined at 1:6',
+      },
+      {
+        desc: 'multi line',
+        src: 'foo\n${bar}baz',
+        error: 'bar is not defined at 2:3',
+      },
+    ].forEach(({ desc, src, error }) => {
+      it(desc, async () => {
+        const parse = createParser();
+        expect.assertions(1);
+        try {
+          await parse(src);
+        } catch (err) {
+          expect(err.message).toEqual(error);
+        }
       });
     });
   });

@@ -1,4 +1,5 @@
 'use strict';
+const getErrorPosition = require('./getErrorPosition');
 
 let customArgs = {};
 function parser(methods = {}) {
@@ -7,8 +8,15 @@ function parser(methods = {}) {
     if (!src) throw new Error('Nothing to parse.');
     customArgs = args;
     const normalized = normalize(src);
-    const parsed = await dynamicFunc(normalized);
-    return denormalize(parsed);
+    try {
+      const parsed = await dynamicFunc(normalized);
+      return denormalize(parsed);
+    } catch (err) {
+      const { line, row } = getErrorPosition(err, {
+        startRow: 6 /* length of expression in eval */,
+      });
+      throw new Error(`${err.message} at ${line}:${row}`);
+    }
   };
 }
 
